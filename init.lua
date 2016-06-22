@@ -174,3 +174,11 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
       end
 
 end)
+minetest.register_craft({
+	output = "atm:atm",
+	recipe = {
+		{"default:steel_ingot", "default:mese_crystal", "default:steel_ingot"},
+		{"default:glass", "currency:minegeld_5", "default:steel_ingot"},
+		{"default:steel_ingot", "default:mese_crystal", "default:steel_ingot"}
+	}
+})
