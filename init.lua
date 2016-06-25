@@ -1,5 +1,6 @@
 atm = {}
 atm.balance = {}
+atm.pth = minetest.get_worldpath().."/atm_accounts"
 
 function atm.showform (player)
    atm.readaccounts()
@@ -32,7 +33,6 @@ end
 
 
 function atm.readaccounts () 
-   atm.pth = minetest.get_worldpath().."/atm_accounts"
    local file = io.open(atm.pth, "r")
    if file then
       repeat
