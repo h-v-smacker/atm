@@ -2,6 +2,7 @@ atm = {}
 atm.balance = {}
 
 function atm.showform (player)
+   atm.readaccounts()
    if not atm.balance[player:get_player_name()] then
       atm.balance[player:get_player_name()] = 0
    end 
@@ -167,10 +168,10 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 	 else
 	    atm.balance[n] = atm.balance[n] + amount
 	 end
+	 atm.saveaccounts()
 	 if not pressed.Quit then
 	    atm.showform(player)
 	 end
-	 atm.saveaccounts()	    
       end
 
 end)
