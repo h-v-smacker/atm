@@ -1,6 +1,7 @@
 atm = {}
 atm.balance = {}
 atm.pth = minetest.get_worldpath().."/atm_accounts"
+local modpath = minetest.get_modpath("atm")
 
 function atm.showform (player)
    atm.readaccounts()
@@ -186,3 +187,4 @@ minetest.register_craft({
 		{"default:steel_ingot", "default:mese_crystal", "default:steel_ingot"}
 	}
 })
+dofile(modpath .. "/interest.lua")
