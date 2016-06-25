@@ -85,27 +85,9 @@ minetest.register_node("atm:atm", {
 
 			  can_dig = can_dig,
 
-			  on_construct = function(pos)
-			     local meta = minetest.get_meta(pos)
---			     meta:set_string("formspec", formspec)
-			     local inv = meta:get_inventory()
-			     inv:set_size('in', 3)
-			  end,
 			  on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 			     atm.showform(player)
 			  end,
-
-			  on_blast = function(pos)
-			     local drops = {}
-			     default.get_inventory_drops(pos, "src", drops)
-			     drops[#drops+1] = "atm:atm"
-			     minetest.remove_node(pos)
-			     return drops
-			  end,
-
-			  allow_metadata_inventory_put = allow_metadata_inventory_put,
-			  allow_metadata_inventory_move = allow_metadata_inventory_move,
-			  allow_metadata_inventory_take = allow_metadata_inventory_take,
 })
 -- Check the form
 
