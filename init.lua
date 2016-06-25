@@ -64,7 +64,7 @@ function atm.saveaccounts()
       table.insert(data, string.format("%d %s\n", v, k))
       l = l+1
    end
-   if not l < atm.linecount then
+   if not (l < atm.linecount) then
       local output = io.open(atm.pth, "w")
       output:write(table.concat(data))
       io.close(output)
