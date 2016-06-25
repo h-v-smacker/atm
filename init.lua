@@ -59,7 +59,7 @@ function atm.saveaccounts()
    end
    local data = {}
 
-   local l
+   local l = 0
    for k, v in pairs(atm.balance) do
       table.insert(data, string.format("%d %s\n", v, k))
       l = l+1
