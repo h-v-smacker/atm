@@ -1,7 +1,6 @@
 atm = {}
 atm.balance = {}
 atm.pth = minetest.get_worldpath().."/atm_accounts"
-atm.linecount = 0
 
 function atm.showform (player)
    atm.readaccounts()
@@ -33,23 +32,21 @@ function atm.showform (player)
 end
 
 
-function atm.readaccounts () 
+function atm.readaccounts ()
+   local b = atm.balance
    local file = io.open(atm.pth, "r")
-   local l = 0
    if file then
       repeat
-	 l = l + 1
 	 local balance = file:read("*n")
-	 if x == nil then
+	 if balance == nil then
 	    break
 	 end
 	 local name = file:read("*l")
-	 atm.balance[name:sub(2)] = balance
+	 b[name:sub(2)] = balance
       until file:read(0) == nil
       io.close(file)
-      atm.linecount = l
    else
-      atm.balance = {}
+      b = {}
    end
 end
 
@@ -58,17 +55,13 @@ function atm.saveaccounts()
       return
    end
    local data = {}
-
-   local l = 0
    for k, v in pairs(atm.balance) do
       table.insert(data, string.format("%d %s\n", v, k))
-      l = l+1
    end
-   if not (l < atm.linecount) then
-      local output = io.open(atm.pth, "w")
-      output:write(table.concat(data))
-      io.close(output)
-   end
+
+   local output = io.open(atm.pth, "w")
+   output:write(table.concat(data))
+   io.close(output)
 
 end
 
