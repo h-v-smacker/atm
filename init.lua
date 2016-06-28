@@ -20,9 +20,9 @@ function atm.showform (player)
       "item_image_button[1,1;1,1;".. "currency:minegeld" ..";i1;\n\n\b\b\b\b\b" .. "1" .."]" ..
       "item_image_button[2,1;1,1;".. "currency:minegeld_5" ..";i5;\n\n\b\b\b\b\b" .. "1" .."]" ..
       "item_image_button[3,1;1,1;".. "currency:minegeld_10" ..";i10;\n\n\b\b\b\b\b" .. "1" .."]" ..
-      "item_image_button[5,1;1,1;".. "currency:minegeld" ..";m1;\n\n\b\b\b\b\b" .. "1" .."]" ..
-      "item_image_button[6,1;1,1;".. "currency:minegeld_5" ..";m5;\n\n\b\b\b\b\b" .. "1" .."]" ..
-      "item_image_button[7,1;1,1;".. "currency:minegeld_10" ..";m10;\n\n\b\b\b\b\b" .. "1" .."]" ..
+      "item_image_button[5,1;1,1;".. "currency:minegeld" ..";i-1;\n\n\b\b\b\b\b" .. "1" .."]" ..
+      "item_image_button[6,1;1,1;".. "currency:minegeld_5" ..";i-5;\n\n\b\b\b\b\b" .. "1" .."]" ..
+      "item_image_button[7,1;1,1;".. "currency:minegeld_10" ..";i-10;\n\n\b\b\b\b\b" .. "1" .."]" ..
       "list[current_player;main;0,4.25;8,1;]"..
       "list[current_player;main;0,5.5;8,3;8]"..
       "listring[]"..
@@ -96,63 +96,38 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
       if form == "atm.form" then
 	 local n = player:get_player_name()
 	 local amount = 0
-	 local fail = 0
 	 local pinv=player:get_inventory()
-	 local m1 = "currency:minegeld"
-	 if pressed.i1 then
-	    amount = 1
-	 end
-	 if pressed.i5 then
-	    amount = 5
-	 end
-	 if pressed.i10 then
-	    amount = 10
-	 end
-	 if pressed.m1 then
-	    amount = -1
-	 end
-	 if pressed.m5 then
-	    amount = -5
-	 end
-	 if pressed.m10 then
-	    amount = -10
+	 for _,i in pairs({1,5,10, -1, -5, -10}) do
+	    if pressed["i"..i] then
+	       amount = i
+	       break
+	    end
 	 end
 	 if (atm.balance[n] + amount) < 0 then
 	    minetest.chat_send_player(n, "Not enough money in your account")
 	    amount = 0
 	 end
-
-	 if amount == 1 then
-	    if pinv:contains_item("main", m1 ) then
-	       pinv:remove_item("main", m1)
-	    else
-	       fail = 1
+	 local item = "currency:minegeld"
+	 if amount < 0 then
+	    if amount < -1 then
+	       item = item .. "_" .. -amount
 	    end
-	 elseif amount == -1 then
-	    if pinv:room_for_item("main", m1) then
-	       pinv:add_item("main", m1)
+	    if pinv:room_for_item("main", item) then
+	       pinv:add_item("main", item)
+	       atm.balance[n] = atm.balance[n] + amount
 	    else
-	       fail=-1
-	    end
-	 elseif amount < 0 then
-	    if pinv:room_for_item("main", "currency:minegeld_"..-amount) then
-	       pinv:add_item("main", "currency:minegeld_"..-amount)
-	    else
-	       fail=-1
+	       minetest.chat_send_player(n, "Not enough room in your inventory")
 	    end
 	 elseif amount > 0 then
-	    if pinv:contains_item("main", "currency:minegeld_"..amount ) then
-	       pinv:remove_item("main", "currency:minegeld_"..amount)
-	    else
-	       fail = 1
+	    if amount > 1 then
+	       item = item .. "_" .. amount
 	    end
-	 end
-	 if fail == 1 then
-	    minetest.chat_send_player(n, "Not enough money in your inventory")
-	 elseif fail == -1 then
-	    minetest.chat_send_player(n, "Not enough room in your inventory")
-	 else
-	    atm.balance[n] = atm.balance[n] + amount
+	    if pinv:contains_item("main", item) then
+	       pinv:remove_item("main", item)
+	       atm.balance[n] = atm.balance[n] + amount
+	    else
+	       minetest.chat_send_player(n, "Not enough money in your inventory")
+	    end
 	 end
 	 atm.saveaccounts()
 	 if not pressed.Quit then
