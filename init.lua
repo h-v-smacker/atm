@@ -1,3 +1,4 @@
+-- Copyright (c) 2016 Gabriel Pérez-Cerezo, licensed under WTFPL.
 atm = {}
 atm.balance = {}
 atm.pth = minetest.get_worldpath().."/atm_accounts"
