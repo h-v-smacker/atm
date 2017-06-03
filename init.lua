@@ -7,7 +7,7 @@ local modpath = minetest.get_modpath("atm")
 function atm.showform (player)
    atm.readaccounts()
    if not atm.balance[player:get_player_name()] then
-      atm.balance[player:get_player_name()] = 0
+      atm.balance[player:get_player_name()] = 30
    end 
    local formspec =
       "size[8,8.5]"..
