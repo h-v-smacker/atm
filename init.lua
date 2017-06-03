@@ -131,7 +131,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 	    end
 	 end
 	 atm.saveaccounts()
-	 if not pressed.Quit then
+	 if not pressed.Quit and not pressed.quit then
 	    atm.showform(player)
 	 end
       end
