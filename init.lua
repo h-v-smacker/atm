@@ -2,6 +2,7 @@
 atm = {}
 atm.balance = {}
 atm.pth = minetest.get_worldpath().."/atm_accounts"
+atm.pth_wt = minetest.get_worldpath().."/atm_wt_transactions"
 local modpath = minetest.get_modpath("atm")
 
 
@@ -91,7 +92,7 @@ function atm.showform3 (player)
 	"item_image_button[4.5,1;1,1;".. "currency:minegeld" ..";i-1;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[5.5,1;1,1;".. "currency:minegeld_5" ..";i-5;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[6.5,1;1,1;".. "currency:minegeld_10" ..";i-10;\n\n\b\b\b\b\b" .. "1" .."]" ..
-	"item_image_button[0.5,2;1,1;".. "currency:minegeld" ..";t10;\n\n\b\b\b\b\b" .. "1" .."]" ..
+	"item_image_button[0.5,2;1,1;".. "currency:minegeld" ..";t10;\n\n\b\b\b\b\b" .. "10" .."]" ..
 	"item_image_button[1.5,2;1,1;".. "currency:minegeld_5" ..";t50;\n\n\b\b\b\b\b" .. "10" .."]" ..
 	"item_image_button[2.5,2;1,1;".. "currency:minegeld_10" ..";t100;\n\n\b\b\b\b\b" .. "10" .."]" ..
 	"item_image_button[4.5,2;1,1;".. "currency:minegeld" ..";t-10;\n\n\b\b\b\b\b" .. "10" .."]" ..
