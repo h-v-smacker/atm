@@ -1,6 +1,8 @@
 -- Copyright (c) 2016 Gabriel Pérez-Cerezo, licensed under WTFPL.
 atm = {}
 atm.balance = {}
+atm.pending_transfers = {}
+atm.completed_transactions = {}
 atm.pth = minetest.get_worldpath().."/atm_accounts"
 atm.pth_wt = minetest.get_worldpath().."/atm_wt_transactions"
 local modpath = minetest.get_modpath("atm")
@@ -115,6 +117,89 @@ end
 
 
 
+-- wire transfer interface
+
+function atm.showform_wt (player)
+	atm.readaccounts()
+	if not atm.balance[player:get_player_name()] then
+		atm.balance[player:get_player_name()] = 30
+	end 
+	local formspec =
+	"size[8,6]"..
+	default.gui_bg..
+	default.gui_bg_img..
+	default.gui_slots..
+	"button[5.75,0;2,1;transactions;Transactions >]" ..
+	"label[2.5,0;Wire Transfer Terminal]" ..
+	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
+	"field[0.5,1.5;5,1;dstn;Recepient:;]"..
+	"field[6,1.5;2,1;amnt;Amount:;]"..
+	"field[0.5,3;7.5,1;desc;Description:;]"..
+	"button_exit[0.2,5;1,1;Quit;Quit]" ..
+	"button[4.7,5;3,1;pay;Complete the payment]"
+	minetest.after((0.1), function(gui)
+			return minetest.show_formspec(player:get_player_name(), "atm.form.wt", gui)
+		end, formspec)
+end
+
+function atm.showform_wtconf (player, dstn, amnt, desc)
+	atm.readaccounts()
+	if not atm.balance[player:get_player_name()] then
+		atm.balance[player:get_player_name()] = 30
+	end 
+	local formspec =
+	"size[8,6]"..
+	default.gui_bg..
+	default.gui_bg_img..
+	default.gui_slots..
+	"label[2.5,0;Wire Transfer Terminal]" ..
+	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
+	"label[2.5,1;TRANSACTION SUMMARY:]"..
+	"label[0.5,1.5;Recepient: " .. dstn .. "]"..
+	"label[0.5,2;Amount: " .. amnt .. "]"..
+	"label[0.5,2.5;Description: " .. desc .. "]"..
+	"button_exit[0.2,5;1,1;Quit;Quit]" ..
+	"button[4.7,5;3,1;cnfrm;Confirm transfer]"
+	minetest.after((0.1), function(gui)
+			return minetest.show_formspec(player:get_player_name(), "atm.form.wtc", gui)
+		end, formspec)
+end
+
+function atm.showform_wtlist (player, tlist)
+	atm.readaccounts()
+	if not atm.balance[player:get_player_name()] then
+		atm.balance[player:get_player_name()] = 30
+	end 
+	
+	local textlist = ''
+	
+	if not tlist then
+		textlist = "no transactions registered\n"
+	else
+		for i,entry in ipairs(tlist) do
+			textlist = textlist .. entry.date .. " $" .. entry.sum .. " from " .. entry.from .. ": " .. entry.desc .. "\n"
+		end
+	end
+
+	local formspec =
+	"size[8,6]"..
+	default.gui_bg..
+	default.gui_bg_img..
+	default.gui_slots..
+	"button[5.75,0;2,1;transfer;< Transfer money]" ..
+	"label[2.5,0;Wire Transfer Terminal]" ..
+	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
+	"textarea[0.5,1.25;7.5,4;hst;Transaction list;" .. textlist .. "]" ..
+	"button_exit[0.2,5;1,1;Quit;Quit]" ..
+	"button[4.7,5;3,1;clr;Clear transactions]"
+	minetest.after((0.1), function(gui)
+			return minetest.show_formspec(player:get_player_name(), "atm.form.wtl", gui)
+		end, formspec)
+end
+
+
+-- banking accounts storage
+
 function atm.readaccounts ()
 	local b = atm.balance
 	local file = io.open(atm.pth, "r")
@@ -147,9 +232,35 @@ function atm.saveaccounts()
 	io.close(output)
 end
 
+
+-- wire transfer data storage
+
+function atm.read_transactions()
+	local file = io.open(atm.pth_wt, "r")
+	if file then
+		local data = file:read("*all")
+		atm.completed_transactions = minetest.deserialize(data)
+	end
+end
+
+function atm.write_transactions()
+	if not atm.completed_transactions then
+		return
+	end
+	local file = io.open(atm.pth_wt, "w")
+	local data = minetest.serialize(atm.completed_transactions)
+	file:write(data)
+	io.close(file)
+end
+
+
+
 minetest.register_on_joinplayer(function(player)
 	atm.readaccounts()
 end)
+
+
+-- ATM node definitions
 
 minetest.register_node("atm:atm", {
 	description = "ATM",
@@ -211,10 +322,35 @@ minetest.register_node("atm:atm3", {
 	end,
 })
 
+
+-- Wire transfer terminal node
+
+minetest.register_node("atm:wtt", {
+	description = "Wire Transfer Terminal",
+	tiles = {
+		"atm_top.png", "atm_top.png",
+		"atm_side_wt.png", "atm_side_wt.png",
+		"atm_side_wt.png", "atm_front_wt.png"
+	},
+	paramtype2 = "facedir",
+	groups = {cracky=2, bank_equipment = 1},
+	legacy_facedir_simple = true,
+	is_ground_content = false,
+	sounds = default.node_sound_stone_defaults(),
+
+	can_dig = can_dig,
+
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		atm.showform_wt(player)
+	end,
+})
+
+
 -- Check the form
 
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 
+	-- ATMs
 	if form == "atm.form" or form == "atm.form2" or form == "atm.form3" then
 		local n = player:get_player_name()
 		local transaction = { amount = 0, denomination = 0, count = 0 }
@@ -294,6 +430,75 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				atm.showform3(player)
 			end
 		end
+                     
+	-- Wire transfer terminals
+	elseif form == "atm.form.wt" or form == "atm.form.wtc" or form == "atm.form.wtl" then
+		
+		local n = player:get_player_name()
+                                          
+		if not pressed.Quit and not pressed.quit then
+			if form == "atm.form.wt" and pressed.transactions then
+				-- transaction list (can be edited in the form, but than means nothing)
+				atm.read_transactions()
+				atm.showform_wtlist(player, atm.completed_transactions[n])
+			elseif form == "atm.form.wtl" and pressed.transfer then
+				atm.showform_wt(player)
+			elseif form == "atm.form.wtl" and pressed.clr then
+				-- clear all transactions in the player's list
+				atm.read_transactions()
+				atm.completed_transactions[n] = nil
+				atm.write_transactions() 
+				minetest.chat_send_player(n, "Your transaction history has been cleared")
+				atm.showform_wtlist(player, atm.completed_transactions[n])
+			elseif form == "atm.form.wt" and pressed.pay then
+                                          
+				-- perform the checks of validity for wire transfer order
+				-- if passed, store the data in a temporary table and show confirmation window
+				if not atm.balance[pressed.dstn] then
+					minetest.chat_send_player(n, "The recepient <" .. pressed.dstn .. "> is not registered in the banking system, aborting")
+					atm.showform_wt(player)
+				elseif not string.match(pressed.amnt, '^[0-9]+$') then
+					minetest.chat_send_player(n, "Invalid amount <" .. pressed.amnt .. "> : must be an integer number, aborting")
+					atm.showform_wt(player)
+				elseif atm.balance[n] < tonumber(pressed.amnt) then
+					minetest.chat_send_player(n, "Your account does not have enough funds to complete this transfer, aborting")
+					atm.showform_wt(player)
+				else
+					atm.pending_transfers[n] = {to = pressed.dstn, sum = tonumber(pressed.amnt), desc = pressed.desc}
+					atm.showform_wtconf(player, pressed.dstn, pressed.amnt, pressed.desc)
+				end
+                                          
+			elseif form == "atm.form.wtc" then
+				-- transaction processing
+				atm.read_transactions()
+				local t = atm.pending_transfers[n]
+				if not atm.completed_transactions[t.to] then
+					atm.completed_transactions[t.to] = {}
+				end
+                                          
+				if atm.balance[n] < t.sum then
+					-- you can never be too paranoid about the funds availaible
+					minetest.chat_send_player(n, "Your account does not have enough funds to complete this transfer, aborting")
+					atm.showform_wt(player)
+				end
+                                          
+				table.insert(atm.completed_transactions[t.to], {date=os.date("%Y-%m-%d"), from=n, sum=t.sum, desc=t.desc})
+				atm.balance[n] = atm.balance[n] - t.sum
+				atm.balance[t.to] = atm.balance[t.to] + t.sum
+                        atm.write_transactions() 
+				atm.saveaccounts()
+				atm.pending_transfers[n] = nil
+				minetest.chat_send_player(n, "Payment of " .. t.sum .. " to " .. t.to .. " completed")
+				minetest.chat_send_player(n, n .. ", thank you for choosing the Wire Transfer system")
+				atm.showform_wt(player)
+			end
+		else
+			-- clear the pending transaction of the player, just in case
+			if atm.pending_transfers[n] then
+				atm.pending_transfers[n] = nil
+			end
+		end                           
+                                          
 	end
 
 end)
@@ -331,5 +536,13 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craft({
+	output = "atm:wtt",
+	recipe = {
+		{"default:steel_ingot", "default:mese_crystal", "default:steel_ingot"},
+		{"default:glass", cheaper_part, "default:steel_ingot"},
+		{"default:steel_ingot", "default:mese_crystal", "default:steel_ingot"}
+	}
+})
 
 dofile(modpath .. "/interest.lua")
