@@ -42,9 +42,11 @@ the terminal. The history of transactions can be erased completely, and it is re
 clean it once the stored data are no longer of any relevance. Otherwise, the transaction history
 is preserved indefinitely.
 
+```
 [ steel ingot, mese crystal, steel ingot ]
 [ glass,       mese wire,    steel ingot ]
 [ steel ingot, mese crystal, steel ingot ]
+```
 
 To complete a wire transfer a player must provide the name of the recipient with an
 existing banking account, the desired amount to be transfered, and a description of the 
