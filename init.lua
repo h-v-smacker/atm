@@ -1,4 +1,4 @@
--- Copyright (c) 2016 Gabriel Pérez-Cerezo, licensed under WTFPL.
+-- Copyright (c) 2016, 2017, 2018 Gabriel Pérez-Cerezo, licensed under WTFPL.
 atm = {}
 atm.balance = {}
 atm.pending_transfers = {}
@@ -6,13 +6,17 @@ atm.completed_transactions = {}
 atm.pth = minetest.get_worldpath().."/atm_accounts"
 atm.pth_wt = minetest.get_worldpath().."/atm_wt_transactions"
 local modpath = minetest.get_modpath("atm")
-
-
+atm.startbalance = 30
+function atm.ensure_init(name)
+   -- Ensure the atm account for the placer specified by name exists
+   atm.readaccounts()
+   if not atm.balance[name] then
+      atm.balance[name] = atm.startbalance
+   end
+end
+   
 function atm.showform (player)
-	atm.readaccounts()
-	if not atm.balance[player:get_player_name()] then
-		atm.balance[player:get_player_name()] = 30
-	end 
+	atm.ensure_init(player:get_player_name())
 	local formspec =
 	"size[8,8.5]"..
 	default.gui_bg..
@@ -39,10 +43,7 @@ end
 
 
 function atm.showform2 (player)
-	atm.readaccounts()
-	if not atm.balance[player:get_player_name()] then
-		atm.balance[player:get_player_name()] = 30
-	end 
+	atm.ensure_init(player:get_player_name())
 	local formspec =
 	"size[8,8.5]"..
 	default.gui_bg..
@@ -75,10 +76,7 @@ end
 
 
 function atm.showform3 (player)
-	atm.readaccounts()
-	if not atm.balance[player:get_player_name()] then
-		atm.balance[player:get_player_name()] = 30
-	end 
+	atm.ensure_init(player:get_player_name())
 	local formspec =
 	"size[8,8.5]"..
 	default.gui_bg..
@@ -120,10 +118,7 @@ end
 -- wire transfer interface
 
 function atm.showform_wt (player)
-	atm.readaccounts()
-	if not atm.balance[player:get_player_name()] then
-		atm.balance[player:get_player_name()] = 30
-	end 
+	atm.ensure_init(player:get_player_name())
 	local formspec =
 	"size[8,6]"..
 	default.gui_bg..
@@ -143,10 +138,7 @@ function atm.showform_wt (player)
 end
 
 function atm.showform_wtconf (player, dstn, amnt, desc)
-	atm.readaccounts()
-	if not atm.balance[player:get_player_name()] then
-		atm.balance[player:get_player_name()] = 30
-	end 
+	atm.ensure_init(player:get_player_name())
 	local formspec =
 	"size[8,6]"..
 	default.gui_bg..
@@ -166,10 +158,7 @@ function atm.showform_wtconf (player, dstn, amnt, desc)
 end
 
 function atm.showform_wtlist (player, tlist)
-	atm.readaccounts()
-	if not atm.balance[player:get_player_name()] then
-		atm.balance[player:get_player_name()] = 30
-	end 
+	atm.ensure_init(player:get_player_name())
 	
 	local textlist = ''
 	
