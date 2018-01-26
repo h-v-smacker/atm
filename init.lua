@@ -1,4 +1,7 @@
 -- Copyright (c) 2016, 2017, 2018 Gabriel Pérez-Cerezo, licensed under WTFPL.
+-- Wire Transfers (c) 2018 Hans von Smacker
+-- Large ATMs (C) 2017 Hans von Smacker
+
 atm = {}
 atm.balance = {}
 atm.pending_transfers = {}
