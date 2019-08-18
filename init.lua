@@ -464,6 +464,9 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				-- transaction processing
 				atm.read_transactions()
 				local t = atm.pending_transfers[n]
+				if not t then
+					return
+				end
 				if not atm.completed_transactions[t.to] then
 					atm.completed_transactions[t.to] = {}
 				end
