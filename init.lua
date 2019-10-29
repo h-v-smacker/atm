@@ -17,7 +17,7 @@ function atm.ensure_init(name)
       atm.balance[name] = atm.startbalance
    end
 end
-   
+
 function atm.showform (player)
 	atm.ensure_init(player:get_player_name())
 	local formspec =
@@ -162,13 +162,13 @@ end
 
 function atm.showform_wtlist (player, tlist)
 	atm.ensure_init(player:get_player_name())
-	
+
 	local textlist = ''
-	
+
 	if not tlist then
 		textlist = "no transactions registered\n"
 	else
-		for i,entry in ipairs(tlist) do
+		for _, entry in ipairs(tlist) do
 			textlist = textlist .. entry.date .. " $" .. entry.sum .. " from " .. entry.from .. ": " .. entry.desc .. "\n"
 		end
 	end
@@ -205,8 +205,6 @@ function atm.readaccounts ()
 			b[name:sub(2)] = balance
 		until file:read(0) == nil
 		io.close(file)
-	else
-		b = {}
 	end
 end
 
@@ -247,7 +245,7 @@ end
 
 
 
-minetest.register_on_joinplayer(function(player)
+minetest.register_on_joinplayer(function()
 	atm.readaccounts()
 end)
 
@@ -267,9 +265,7 @@ minetest.register_node("atm:atm", {
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
 
-	can_dig = can_dig,
-
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+	on_rightclick = function(_, _, player)
 		atm.showform(player)
 	end,
 })
@@ -287,9 +283,7 @@ minetest.register_node("atm:atm2", {
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
 
-	can_dig = can_dig,
-
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+	on_rightclick = function(_, _, player)
 		atm.showform2(player)
 	end,
 })
@@ -307,9 +301,7 @@ minetest.register_node("atm:atm3", {
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
 
-	can_dig = can_dig,
-
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+	on_rightclick = function(_, _, player)
 		atm.showform3(player)
 	end,
 })
@@ -330,9 +322,7 @@ minetest.register_node("atm:wtt", {
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
 
-	can_dig = can_dig,
-
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+	on_rightclick = function(_, _, player)
 		atm.showform_wt(player)
 	end,
 })
@@ -347,7 +337,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		local n = player:get_player_name()
 		local transaction = { amount = 0, denomination = 0, count = 0 }
 		local pinv=player:get_inventory()
-                                          
+
 		-- single note transactions
 		for _,i in pairs({1, 5, 10, -1, -5, -10}) do
 			if pressed["i"..i] then
@@ -386,7 +376,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				break
 			end
 		end
-                                          
+
 		if (atm.balance[n] + transaction.amount) < 0 then
 			minetest.chat_send_player(n, "Not enough money in your account")
 			transaction.amount = 0
@@ -422,12 +412,12 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				atm.showform3(player)
 			end
 		end
-                     
+
 	-- Wire transfer terminals
 	elseif form == "atm.form.wt" or form == "atm.form.wtc" or form == "atm.form.wtl" then
-		
+
 		local n = player:get_player_name()
-                                          
+
 		if not pressed.Quit and not pressed.quit then
 			if form == "atm.form.wt" and pressed.transactions then
 				-- transaction list (can be edited in the form, but than means nothing)
@@ -439,27 +429,30 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				-- clear all transactions in the player's list
 				atm.read_transactions()
 				atm.completed_transactions[n] = nil
-				atm.write_transactions() 
+				atm.write_transactions()
 				minetest.chat_send_player(n, "Your transaction history has been cleared")
 				atm.showform_wtlist(player, atm.completed_transactions[n])
 			elseif form == "atm.form.wt" and pressed.pay then
-                                          
+
 				-- perform the checks of validity for wire transfer order
 				-- if passed, store the data in a temporary table and show confirmation window
 				if not atm.balance[pressed.dstn] then
-					minetest.chat_send_player(n, "The recepient <" .. pressed.dstn .. "> is not registered in the banking system, aborting")
+					minetest.chat_send_player(n, "The recepient <" .. pressed.dstn ..
+            "> is not registered in the banking system, aborting")
 					atm.showform_wt(player)
 				elseif not string.match(pressed.amnt, '^[0-9]+$') then
-					minetest.chat_send_player(n, "Invalid amount <" .. pressed.amnt .. "> : must be an integer number, aborting")
+					minetest.chat_send_player(n, "Invalid amount <" .. pressed.amnt ..
+            "> : must be an integer number, aborting")
 					atm.showform_wt(player)
 				elseif atm.balance[n] < tonumber(pressed.amnt) then
-					minetest.chat_send_player(n, "Your account does not have enough funds to complete this transfer, aborting")
+					minetest.chat_send_player(n, "Your account does not have enough " ..
+            "funds to complete this transfer, aborting")
 					atm.showform_wt(player)
 				else
 					atm.pending_transfers[n] = {to = pressed.dstn, sum = tonumber(pressed.amnt), desc = pressed.desc}
 					atm.showform_wtconf(player, pressed.dstn, pressed.amnt, pressed.desc)
 				end
-                                          
+
 			elseif form == "atm.form.wtc" then
 				-- transaction processing
 				atm.read_transactions()
@@ -470,7 +463,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				if not atm.completed_transactions[t.to] then
 					atm.completed_transactions[t.to] = {}
 				end
-                                          
+
 				if atm.balance[n] < t.sum then
 					-- you can never be too paranoid about the funds availaible
 				   minetest.chat_send_player(n, "Your account does not have enough funds to complete this transfer, aborting")
@@ -481,11 +474,11 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				   end
 				   return
 				end
-                                          
+
 				table.insert(atm.completed_transactions[t.to], {date=os.date("%Y-%m-%d"), from=n, sum=t.sum, desc=t.desc})
 				atm.balance[n] = atm.balance[n] - t.sum
 				atm.balance[t.to] = atm.balance[t.to] + t.sum
-				atm.write_transactions() 
+				atm.write_transactions()
 				atm.saveaccounts()
 				minetest.chat_send_player(n, "Payment of " .. t.sum .. " to " .. t.to .. " completed")
 				minetest.chat_send_player(n, n .. ", thank you for choosing the Wire Transfer system")
@@ -505,8 +498,8 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 			if atm.pending_transfers[n] then
 				atm.pending_transfers[n] = nil
 			end
-		end                           
-                                          
+		end
+
 	end
 
 end)
