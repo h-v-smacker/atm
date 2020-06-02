@@ -1,3 +1,51 @@
+local handle_after_place = function(pos, placer, itemstack, pointed_thing)
+  -- Store node owner
+  local meta = minetest.get_meta(pos)
+  local owner = placer:get_player_name()
+  meta:set_string("owner", owner)
+  -- Ensure owner's account exists
+  atm.ensure_init(owner)
+end
+
+local tube_config = {
+  can_insert = function(pos, node, stack, direction)
+    local accept = false
+    -- Check ATM has owner
+    local meta = minetest.get_meta(pos)
+    local owner = meta:get_string("owner")
+    if owner then
+      local input = ItemStack(stack)
+      local input_name = input:get_name()
+      accept = input_name:match('^currency:minegeld_%d+$')
+    end
+    return accept
+  end,
+  insert_object = function(pos, node, stack, direction)
+    -- Get ATM owner
+    local meta = minetest.get_meta(pos)
+    local owner = meta:get_string("owner")
+    -- Count minegeld
+    local input = ItemStack(stack)
+    local input_name = input:get_name()
+    if input_name:match('^currency:minegeld_%d+$') then
+      local minegeld_type = string.gsub(input_name, "currency:minegeld_", "")
+      minegeld_type = tonumber(minegeld_type)
+      local mg_count = minegeld_type * input:get_count()
+      atm.balance[owner] = math.floor(atm.balance[owner] + mg_count)
+      atm.saveaccounts()
+      minetest.chat_send_player(owner, "Received " .. mg_count .. " by tube")
+      return ItemStack(nil)
+    else
+      return ItemStack(stack)
+    end
+  end,
+  connect_sides = {
+    left = 1, right = 1,
+    front = 1, back = 1,
+    top = 1, bottom = 1
+  }
+}
+
 
 -- ATM node definitions
 
@@ -45,7 +93,10 @@ minetest.register_node("atm:atm3", {
 		"atm3_side.png", "atm3_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {cracky=2, bank_equipment = 3},
+	groups = {
+		cracky = 2, bank_equipment = 1,
+		tubedevice = 1, tubedevice_receiver = 1
+	},
 	legacy_facedir_simple = true,
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
@@ -53,6 +104,9 @@ minetest.register_node("atm:atm3", {
 	on_rightclick = function(_, _, player)
 		atm.showform3(player)
 	end,
+
+	after_place_node = handle_after_place,
+	tube = tube_config,
 })
 
 
@@ -66,7 +120,10 @@ minetest.register_node("atm:wtt", {
 		"atm_side_wt.png", "atm_front_wt.png"
 	},
 	paramtype2 = "facedir",
-	groups = {cracky=2, bank_equipment = 1},
+	groups = {
+		cracky = 2, bank_equipment = 1,
+		tubedevice = 1, tubedevice_receiver = 1
+	},
 	legacy_facedir_simple = true,
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
@@ -74,4 +131,7 @@ minetest.register_node("atm:wtt", {
 	on_rightclick = function(_, _, player)
 		atm.showform_wt(player)
 	end,
+
+	after_place_node = handle_after_place,
+	tube = tube_config,
 })
