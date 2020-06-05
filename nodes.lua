@@ -16,28 +16,45 @@ local tube_config = {
     if owner then
       local input = ItemStack(stack)
       local input_name = input:get_name()
-      accept = input_name:match('^currency:minegeld_%d+$')
+      accept = input_name:match('^currency:minegeld_%d+$') or
+        input_name:match('^currency:minegeld$')
     end
     return accept
   end,
   insert_object = function(pos, node, stack, direction)
+    local input = ItemStack(stack)
+    local input_name = input:get_name()
+    local return_stack = nil
+    local minegeld_type = nil
+    local mg_count = 0
     -- Get ATM owner
     local meta = minetest.get_meta(pos)
     local owner = meta:get_string("owner")
-    -- Count minegeld
-    local input = ItemStack(stack)
-    local input_name = input:get_name()
+    -- Determine minegeld type
     if input_name:match('^currency:minegeld_%d+$') then
-      local minegeld_type = string.gsub(input_name, "currency:minegeld_", "")
+      minegeld_type = string.gsub(input_name, "currency:minegeld_", "")
       minegeld_type = tonumber(minegeld_type)
-      local mg_count = minegeld_type * input:get_count()
+    elseif input_name:match('^currency:minegeld$') then
+      minegeld_type = 1
+    end
+    -- Count minegeld
+    if minegeld_type ~= nil then
+      mg_count = minegeld_type * input:get_count()
+    end
+    -- Update player balance if possible,
+    -- return input stack otherwise
+    if mg_count ~= nil then
       atm.balance[owner] = math.floor(atm.balance[owner] + mg_count)
       atm.saveaccounts()
-      minetest.chat_send_player(owner, "Received " .. mg_count .. " by tube")
-      return ItemStack(nil)
+      minetest.chat_send_player(
+        owner,
+        "Received " .. mg_count .. " minegeld by tube; balance: " .. atm.balance[owner]
+      )
     else
-      return ItemStack(stack)
+      return_stack = stack
     end
+    -- Return unrelated items
+    return ItemStack(return_stack)
   end,
   connect_sides = {
     left = 1, right = 1,
