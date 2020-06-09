@@ -1,3 +1,7 @@
+local function isempty(s)
+  return s == nil or s == ''
+end
+
 local handle_after_place = function(pos, placer, itemstack, pointed_thing)
   -- Store node owner
   local meta = minetest.get_meta(pos)
@@ -13,7 +17,7 @@ local tube_config = {
     -- Check ATM has owner
     local meta = minetest.get_meta(pos)
     local owner = meta:get_string("owner")
-    if owner then
+    if not isempty(owner) then
       local input = ItemStack(stack)
       local input_name = input:get_name()
       accept = input_name:match('^currency:minegeld_%d+$') or
@@ -38,12 +42,12 @@ local tube_config = {
       minegeld_type = 1
     end
     -- Count minegeld
-    if minegeld_type ~= nil then
+    if not isempty(minegeld_type) then
       mg_count = minegeld_type * input:get_count()
     end
     -- Update player balance if possible,
     -- return input stack otherwise
-    if mg_count ~= nil then
+    if not isempty(mg_count) then
       atm.balance[owner] = math.floor(atm.balance[owner] + mg_count)
       atm.saveaccounts()
       minetest.chat_send_player(
