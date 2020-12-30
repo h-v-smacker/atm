@@ -1,8 +1,10 @@
 
+local S = minetest.get_translator("atm")
+
 -- ATM node definitions
 
 minetest.register_node("atm:atm", {
-	description = "ATM",
+	description = S("ATM"),
 	tiles = {
 		"atm_top.png", "atm_top.png",
 		"atm_side.png", "atm_side.png",
@@ -20,7 +22,7 @@ minetest.register_node("atm:atm", {
 })
 
 minetest.register_node("atm:atm2", {
-	description = "ATM model 2",
+	description = S("ATM model 2"),
 	tiles = {
 		"atm2_top.png", "atm2_top.png",
 		"atm2_side.png", "atm2_side.png",
@@ -38,7 +40,7 @@ minetest.register_node("atm:atm2", {
 })
 
 minetest.register_node("atm:atm3", {
-	description = "ATM model 3",
+	description = S("ATM model 3"),
 	tiles = {
 		"atm3_top.png", "atm3_top.png",
 		"atm3_side.png", "atm3_side.png",
@@ -59,7 +61,7 @@ minetest.register_node("atm:atm3", {
 -- Wire transfer terminal node
 
 minetest.register_node("atm:wtt", {
-	description = "Wire Transfer Terminal",
+	description = S("Wire Transfer Terminal"),
 	tiles = {
 		"atm_top.png", "atm_top.png",
 		"atm_side_wt.png", "atm_side_wt.png",
