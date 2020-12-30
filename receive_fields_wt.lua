@@ -29,12 +29,12 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				-- perform the checks of validity for wire transfer order
 				-- if passed, store the data in a temporary table and show confirmation window
 				if not atm.balance[pressed.dstn] then
-				   minetest.chat_send_player(n, S("The recepient <") .. pressed.dstn ..
-							     S("> is not registered in the banking system, aborting"))
+				   minetest.chat_send_player(n, S("The recepient").." <" .. pressed.dstn ..
+							     "> "..S("is not registered in the banking system, aborting"))
 					atm.showform_wt(player)
 				elseif not string.match(pressed.amnt, '^[0-9]+$') then
-				   minetest.chat_send_player(n, S("Invalid amount <") .. pressed.amnt ..
-							     S("> : must be an integer number, aborting"))
+				   minetest.chat_send_player(n, S("Invalid amount").." <" .. pressed.amnt ..
+							     "> : "..S("must be an integer number, aborting"))
 					atm.showform_wt(player)
 				elseif atm.balance[n] < tonumber(pressed.amnt) then
 				   minetest.chat_send_player(n, S("Your account does not have enough ") ..
@@ -72,7 +72,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				atm.balance[t.to] = atm.balance[t.to] + t.sum
 				atm.write_transactions()
 				atm.saveaccounts()
-				minetest.chat_send_player(n, S("Payment of ") .. t.sum .. S(" to ") .. t.to .. S(" completed"))
+				minetest.chat_send_player(n, S("Payment of").." " .. t.sum .. " ".. S("to") .. " " .. t.to .." ".. S("completed"))
 				minetest.chat_send_player(n, n .. S(", thank you for choosing the Wire Transfer system"))
 				if t.callback then -- run callbacks from mods
 				   t.callback(t)

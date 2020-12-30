@@ -110,12 +110,12 @@ function atm.showform_wt (player)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"button[5.75,0;2,1;transactions;"..S("Transactions >").."]" ..
+	"button[5.75,0;2,1;transactions;"..S("Transactions").." >".."]" ..
 	"label[2.5,0;"..S("Wire Transfer Terminal").."]" ..
 	"label[2,0.5;"..S("Your account balance: $").. atm.balance[player:get_player_name()].. "]" ..
-	"field[0.5,1.5;5,1;dstn;"..S("Recepient:")..";]"..
-	"field[6,1.5;2,1;amnt;"..S("Amount:")..";]"..
-	"field[0.5,3;7.5,1;desc;"..S("Description:")..";]"..
+	"field[0.5,1.5;5,1;dstn;"..S("Recepient: ")..";]"..
+	"field[6,1.5;2,1;amnt;"..S("Amount: ")..";]"..
+	"field[0.5,3;7.5,1;desc;"..S("Description: ")..";]"..
 	"button_exit[0.2,5;1,1;Quit;"..S("Quit").."]" ..
 	"button[4.7,5;3,1;pay;"..S("Complete the payment").."]"
 	minetest.after((0.1), function(gui)
@@ -133,7 +133,7 @@ function atm.showform_wtconf (player, dstn, amnt, desc)
 	"label[2.5,0;"..S("Wire Transfer Terminal").."]" ..
 	"label[2,0.5;"..S("Your account balance: $").."".. atm.balance[player:get_player_name()].. "]" ..
 	"label[2.5,1;"..S("TRANSACTION SUMMARY:").."]"..
-	   "label[0.5,1.5;"..S("Recepient: ") .. dstn .. "]"..
+	"label[0.5,1.5;"..S("Recepient: ") .. dstn .. "]"..
 	"label[0.5,2;"..S("Amount: ") .. amnt .. "]"..
 	"label[0.5,2.5;"..S("Description: ") .. desc .. "]"..
 	"button_exit[0.2,5;1,1;Quit;"..S("Quit").."]" ..
@@ -161,7 +161,7 @@ function atm.showform_wtlist (player, tlist)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"button[5.75,0;2,1;transfer;"..S("< Transfer money").."]" ..
+	"button[5.75,0;2,1;transfer;".."< "..S("Transfer money").."]" ..
 	"label[2.5,0;"..S("Wire Transfer Terminal").."]" ..
 	"label[2,0.5;"..S("Your account balance: $").."".. atm.balance[player:get_player_name()].. "]" ..
 	"textarea[0.5,1.25;7.5,4;hst;"..S("Transaction list")..";" .. textlist .. "]" ..
