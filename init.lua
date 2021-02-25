@@ -4,7 +4,7 @@
 
 atm = {
   balance = {},
-  startbalance = 30,
+  startbalance = 0,
   pending_transfers = {},
   completed_transactions = {},
   pth = minetest.get_worldpath().."/atm_accounts",
@@ -19,5 +19,5 @@ dofile(modpath .. "/forms.lua")
 dofile(modpath .. "/nodes.lua")
 dofile(modpath .. "/receive_fields.lua")
 dofile(modpath .. "/receive_fields_wt.lua")
-dofile(modpath .. "/crafts.lua")
+--dofile(modpath .. "/crafts.lua")
 dofile(modpath .. "/interest.lua")
