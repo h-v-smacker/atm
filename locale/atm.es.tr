@@ -1,0 +1,37 @@
+# textdomain: atm
+
+Money input=Ingresar Dinero
+
+Money output=Retirar Dinero
+
+Your account balance: $=Tu Dinero Actual:
+
+Quit=Salir
+
+Wire Transfer Terminal=Terminal de Transferencia
+
+Transactions=Transacciones
+
+Amount: =Cantidad: 
+
+Description: =Descripción: 
+
+Complete the payment=Completar el Pago
+
+Recepient: =Destinatario: 
+
+Confirm transfer=Confirmar transferencia
+
+Your transaction history has been cleared=Tu historial de transacciones está limpio
+
+is not registered in the banking system, aborting=no tiene cuenta bancaria, abortando
+
+Invalid amount=Cantidad Inválida
+
+must be an integer number, aborting=debe ser un número entero, abortando
+
+Your account does not have enough =Tu cuenta bancaria no tiene suficientes
+
+funds to complete this transfer, aborting=fondos para completar la transferencia, abortando
+
+Your account does not have enough funds to complete this transfer, aborting=Tu cuenta no tiene suficientes fondos para realizar esta transferencia, abortando

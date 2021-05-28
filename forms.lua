@@ -1,4 +1,5 @@
 
+local S = minetest.get_translator("atm")
 
 function atm.showform (player)
 	atm.ensure_init(player:get_player_name())
@@ -7,10 +8,10 @@ function atm.showform (player)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"label[1.25,0.5;Money input]" ..
-	"label[5.25,0.5;Money output]" ..
-	"label[2.5,0.15;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"button_exit[2.5,1.5;1,2;Quit;Quit]" ..
+	"label[1.25,0.5;"..S("Money input").."]" ..
+	"label[5.25,0.5;"..S("Money output").."]" ..
+	"label[2.5,0.15;"..S("Your account balance: $").. atm.balance[player:get_player_name()].. "]" ..
+	"button_exit[2.5,1.5;1,2;Quit;"..S("Quit").."]" ..
 	"item_image_button[0.5,1;1,1;".. "currency:minegeld" ..";i1;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[1.5,1;1,1;".. "currency:minegeld_5" ..";i5;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[2.5,1;1,1;".. "currency:minegeld_10" ..";i10;\n\n\b\b\b\b\b" .. "1" .."]" ..
@@ -34,10 +35,10 @@ function atm.showform2 (player)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"label[1.25,0.5;Money input]" ..
-	"label[5.25,0.5;Money output]" ..
-	"label[2.5,0.15;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"button_exit[2.5,2.5;1,2;Quit;Quit]" ..
+	"label[1.25,0.5;"..S("Money input").."]" ..
+	"label[5.25,0.5;"..S("Money output").."]" ..
+	"label[2.5,0.15;"..S("Your account balance: $").. atm.balance[player:get_player_name()].. "]" ..
+	"button_exit[2.5,2.5;1,2;Quit;"..S("Quit").."]" ..
 	"item_image_button[0.5,1;1,1;".. "currency:minegeld" ..";i1;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[1.5,1;1,1;".. "currency:minegeld_5" ..";i5;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[2.5,1;1,1;".. "currency:minegeld_10" ..";i10;\n\n\b\b\b\b\b" .. "1" .."]" ..
@@ -67,10 +68,10 @@ function atm.showform3 (player)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"label[1.25,0.5;Money input]" ..
-	"label[5.25,0.5;Money output]" ..
-	"label[2.5,0.15;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"button_exit[3.5,2.75;1,2;Quit;Quit]" ..
+	"label[1.25,0.5;"..S("Money input").."]" ..
+	"label[5.25,0.5;"..S("Money output").."]" ..
+	"label[2.5,0.15;"..S("Your account balance: $").. atm.balance[player:get_player_name()].. "]" ..
+	"button_exit[3.5,2.75;1,2;Quit;"..S("Quit").."]" ..
 	"item_image_button[0.5,1;1,1;".. "currency:minegeld" ..";i1;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[1.5,1;1,1;".. "currency:minegeld_5" ..";i5;\n\n\b\b\b\b\b" .. "1" .."]" ..
 	"item_image_button[2.5,1;1,1;".. "currency:minegeld_10" ..";i10;\n\n\b\b\b\b\b" .. "1" .."]" ..
@@ -109,14 +110,14 @@ function atm.showform_wt (player)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"button[5.75,0;2,1;transactions;Transactions >]" ..
-	"label[2.5,0;Wire Transfer Terminal]" ..
-	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"field[0.5,1.5;5,1;dstn;Recepient:;]"..
-	"field[6,1.5;2,1;amnt;Amount:;]"..
-	"field[0.5,3;7.5,1;desc;Description:;]"..
-	"button_exit[0.2,5;1,1;Quit;Quit]" ..
-	"button[4.7,5;3,1;pay;Complete the payment]"
+	"button[5.75,0;2,1;transactions;"..S("Transactions").." >".."]" ..
+	"label[2.5,0;"..S("Wire Transfer Terminal").."]" ..
+	"label[2,0.5;"..S("Your account balance: $").. atm.balance[player:get_player_name()].. "]" ..
+	"field[0.5,1.5;5,1;dstn;"..S("Recepient: ")..";]"..
+	"field[6,1.5;2,1;amnt;"..S("Amount: ")..";]"..
+	"field[0.5,3;7.5,1;desc;"..S("Description: ")..";]"..
+	"button_exit[0.2,5;1,1;Quit;"..S("Quit").."]" ..
+	"button[4.7,5;3,1;pay;"..S("Complete the payment").."]"
 	minetest.after((0.1), function(gui)
 			return minetest.show_formspec(player:get_player_name(), "atm.form.wt", gui)
 		end, formspec)
@@ -129,14 +130,14 @@ function atm.showform_wtconf (player, dstn, amnt, desc)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"label[2.5,0;Wire Transfer Terminal]" ..
-	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"label[2.5,1;TRANSACTION SUMMARY:]"..
-	"label[0.5,1.5;Recepient: " .. dstn .. "]"..
-	"label[0.5,2;Amount: " .. amnt .. "]"..
-	"label[0.5,2.5;Description: " .. desc .. "]"..
-	"button_exit[0.2,5;1,1;Quit;Quit]" ..
-	"button[4.7,5;3,1;cnfrm;Confirm transfer]"
+	"label[2.5,0;"..S("Wire Transfer Terminal").."]" ..
+	"label[2,0.5;"..S("Your account balance: $").."".. atm.balance[player:get_player_name()].. "]" ..
+	"label[2.5,1;"..S("TRANSACTION SUMMARY:").."]"..
+	"label[0.5,1.5;"..S("Recepient: ") .. dstn .. "]"..
+	"label[0.5,2;"..S("Amount: ") .. amnt .. "]"..
+	"label[0.5,2.5;"..S("Description: ") .. desc .. "]"..
+	"button_exit[0.2,5;1,1;Quit;"..S("Quit").."]" ..
+	"button[4.7,5;3,1;cnfrm;"..S("Confirm transfer").."]"
 	minetest.after((0.1), function(gui)
 			return minetest.show_formspec(player:get_player_name(), "atm.form.wtc", gui)
 		end, formspec)
@@ -148,10 +149,10 @@ function atm.showform_wtlist (player, tlist)
 	local textlist = ''
 
 	if not tlist then
-		textlist = "no transactions registered\n"
+	   textlist = S("no transactions registered").."\n"
 	else
 		for _, entry in ipairs(tlist) do
-			textlist = textlist .. entry.date .. " $" .. entry.sum .. " from " .. entry.from .. ": " .. entry.desc .. "\n"
+		   textlist = textlist .. entry.date .. S(" $") .. entry.sum .. S(" from ") .. entry.from .. ": " .. entry.desc .. "\n"
 		end
 	end
 
@@ -160,12 +161,12 @@ function atm.showform_wtlist (player, tlist)
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"button[5.75,0;2,1;transfer;< Transfer money]" ..
-	"label[2.5,0;Wire Transfer Terminal]" ..
-	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"textarea[0.5,1.25;7.5,4;hst;Transaction list;" .. textlist .. "]" ..
-	"button_exit[0.2,5;1,1;Quit;Quit]" ..
-	"button[4.7,5;3,1;clr;Clear transactions]"
+	"button[5.75,0;2,1;transfer;".."< "..S("Transfer money").."]" ..
+	"label[2.5,0;"..S("Wire Transfer Terminal").."]" ..
+	"label[2,0.5;"..S("Your account balance: $").."".. atm.balance[player:get_player_name()].. "]" ..
+	"textarea[0.5,1.25;7.5,4;hst;"..S("Transaction list")..";" .. textlist .. "]" ..
+	"button_exit[0.2,5;1,1;Quit;"..S("Quit").."]" ..
+	"button[4.7,5;3,1;clr;"..S("Clear transactions").."]"
 	minetest.after((0.1), function(gui)
 			return minetest.show_formspec(player:get_player_name(), "atm.form.wtl", gui)
 		end, formspec)

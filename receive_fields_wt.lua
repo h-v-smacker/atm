@@ -1,4 +1,6 @@
 
+local S = minetest.get_translator("atm")
+
 -- Check the form
 
 minetest.register_on_player_receive_fields(function(player, form, pressed)
@@ -20,23 +22,23 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				atm.read_transactions()
 				atm.completed_transactions[n] = nil
 				atm.write_transactions()
-				minetest.chat_send_player(n, "Your transaction history has been cleared")
+				minetest.chat_send_player(n, S("Your transaction history has been cleared"))
 				atm.showform_wtlist(player, atm.completed_transactions[n])
 			elseif form == "atm.form.wt" and pressed.pay then
 
 				-- perform the checks of validity for wire transfer order
 				-- if passed, store the data in a temporary table and show confirmation window
 				if not atm.balance[pressed.dstn] then
-					minetest.chat_send_player(n, "The recepient <" .. pressed.dstn ..
-            "> is not registered in the banking system, aborting")
+				   minetest.chat_send_player(n, S("The recepient").." <" .. pressed.dstn ..
+							     "> "..S("is not registered in the banking system, aborting"))
 					atm.showform_wt(player)
 				elseif not string.match(pressed.amnt, '^[0-9]+$') then
-					minetest.chat_send_player(n, "Invalid amount <" .. pressed.amnt ..
-            "> : must be an integer number, aborting")
+				   minetest.chat_send_player(n, S("Invalid amount").." <" .. pressed.amnt ..
+							     "> : "..S("must be an integer number, aborting"))
 					atm.showform_wt(player)
 				elseif atm.balance[n] < tonumber(pressed.amnt) then
-					minetest.chat_send_player(n, "Your account does not have enough " ..
-            "funds to complete this transfer, aborting")
+				   minetest.chat_send_player(n, S("Your account does not have enough ") ..
+							     S("funds to complete this transfer, aborting"))
 					atm.showform_wt(player)
 				else
 					atm.pending_transfers[n] = {to = pressed.dstn, sum = tonumber(pressed.amnt), desc = pressed.desc}
@@ -56,7 +58,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 
 				if atm.balance[n] < t.sum then
 					-- you can never be too paranoid about the funds availaible
-				   minetest.chat_send_player(n, "Your account does not have enough funds to complete this transfer, aborting")
+				   minetest.chat_send_player(n, S("Your account does not have enough funds to complete this transfer, aborting"))
 				   if not t.extern then
 				      atm.showform_wt(player)
 				   else
@@ -70,8 +72,8 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				atm.balance[t.to] = atm.balance[t.to] + t.sum
 				atm.write_transactions()
 				atm.saveaccounts()
-				minetest.chat_send_player(n, "Payment of " .. t.sum .. " to " .. t.to .. " completed")
-				minetest.chat_send_player(n, n .. ", thank you for choosing the Wire Transfer system")
+				minetest.chat_send_player(n, S("Payment of").." " .. t.sum .. " ".. S("to") .. " " .. t.to .." ".. S("completed"))
+				minetest.chat_send_player(n, n .. S(", thank you for choosing the Wire Transfer system"))
 				if t.callback then -- run callbacks from mods
 				   t.callback(t)
 				end
