@@ -1,5 +1,5 @@
 local function isempty(s)
-  return s == nil or s == ''
+  return s == nil or s == '' or s == 0
 end
 
 local handle_after_place = function(pos, placer, itemstack, pointed_thing)
@@ -21,7 +21,8 @@ local tube_config = {
       local input = ItemStack(stack)
       local input_name = input:get_name()
       accept = input_name:match('^currency:minegeld_%d+$') or
-        input_name:match('^currency:minegeld$')
+        input_name:match('^currency:minegeld$') or
+        input_name:match('^currency:minegeld_cent_%d+$')
     end
     return accept
   end,
@@ -31,6 +32,7 @@ local tube_config = {
     local return_stack = nil
     local minegeld_type = nil
     local mg_count = 0
+    local multiplier = 1
     -- Get ATM owner
     local meta = minetest.get_meta(pos)
     local owner = meta:get_string("owner")
@@ -40,11 +42,18 @@ local tube_config = {
       minegeld_type = tonumber(minegeld_type)
     elseif input_name:match('^currency:minegeld$') then
       minegeld_type = 1
+    elseif input_name:match('^currency:minegeld_cent_%d+$') then
+      multiplier = .01
+      minegeld_type = string.gsub(input_name, "currency:minegeld_cent_", "")
+      minegeld_type = tonumber(minegeld_type)
     end
     -- Count minegeld
     if not isempty(minegeld_type) then
-      mg_count = minegeld_type * input:get_count()
+      mg_count = math.floor(multiplier * minegeld_type * input:get_count())
+      input:take_item(mg_count / (multiplier * minegeld_type))
+      return_stack = input
     end
+
     -- Update player balance if possible,
     -- return input stack otherwise
     if not isempty(mg_count) then
@@ -57,7 +66,7 @@ local tube_config = {
     else
       return_stack = stack
     end
-    -- Return unrelated items
+    -- Return unrelated items or leftover coins
     return ItemStack(return_stack)
   end,
   connect_sides = {
@@ -148,3 +157,4 @@ minetest.register_node("atm:wtt", {
   after_place_node = handle_after_place,
   tube = tube_config,
 })
+

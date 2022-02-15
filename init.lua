@@ -21,3 +21,6 @@ dofile(modpath .. "/receive_fields.lua")
 dofile(modpath .. "/receive_fields_wt.lua")
 dofile(modpath .. "/crafts.lua")
 dofile(modpath .. "/interest.lua")
+
+print('[atm] loaded')
+
