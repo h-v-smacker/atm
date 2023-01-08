@@ -48,6 +48,7 @@ function atm.read_transactions()
 	if file then
 		local data = file:read("*all")
 		atm.completed_transactions = minetest.deserialize(data)
+		io.close(file)
 	end
 end
 
