@@ -7,7 +7,7 @@ minetest.register_globalstep(function(dtime)
 		atm.readaccounts()
 		for _,player in ipairs(minetest.get_connected_players()) do
 			local name = player:get_player_name()
-			if not (atm.balance[name] == nil) then
+			if atm.balance[name] then
 				atm.balance[name] = math.floor(atm.balance[name] + 5)
 			end
 		end
