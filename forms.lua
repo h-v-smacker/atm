@@ -1,7 +1,7 @@
 
 
 function atm.showform (player)
-	atm.ensure_init(player:get_player_name())
+	atm.read_account(player:get_player_name())
 	local formspec =
 	"size[8,8.5]"..
 	default.gui_bg..
@@ -28,7 +28,7 @@ end
 
 
 function atm.showform2 (player)
-	atm.ensure_init(player:get_player_name())
+	atm.read_account(player:get_player_name())
 	local formspec =
 	"size[8,8.5]"..
 	default.gui_bg..
@@ -61,7 +61,7 @@ end
 
 
 function atm.showform3 (player)
-	atm.ensure_init(player:get_player_name())
+	atm.read_account(player:get_player_name())
 	local formspec =
 	"size[8,8.5]"..
 	default.gui_bg..
@@ -103,7 +103,7 @@ end
 -- wire transfer interface
 
 function atm.showform_wt (player)
-	atm.ensure_init(player:get_player_name())
+	atm.read_account(player:get_player_name())
 	local formspec =
 	"size[8,6]"..
 	default.gui_bg..
@@ -123,7 +123,7 @@ function atm.showform_wt (player)
 end
 
 function atm.showform_wtconf (player, dstn, amnt, desc)
-	atm.ensure_init(player:get_player_name())
+	atm.read_account(player:get_player_name())
 	local formspec =
 	"size[8,6]"..
 	default.gui_bg..
@@ -143,7 +143,7 @@ function atm.showform_wtconf (player, dstn, amnt, desc)
 end
 
 function atm.showform_wtlist (player, tlist)
-	atm.ensure_init(player:get_player_name())
+	atm.read_account(player:get_player_name())
 
 	local textlist = ''
 

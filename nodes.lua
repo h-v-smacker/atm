@@ -8,7 +8,7 @@ local handle_after_place = function(pos, placer, itemstack, pointed_thing)
   local owner = placer:get_player_name()
   meta:set_string("owner", owner)
   -- Ensure owner's account exists
-  atm.ensure_init(owner)
+  atm.read_account(owner)
 end
 
 local tube_config = {
@@ -58,7 +58,7 @@ local tube_config = {
     -- return input stack otherwise
     if not isempty(mg_count) then
       atm.balance[owner] = math.floor(atm.balance[owner] + mg_count)
-      atm.saveaccounts()
+      atm.save_account(owner)
       minetest.chat_send_player(
         owner,
         "Received " .. mg_count .. " minegeld by tube; balance: " .. atm.balance[owner]
