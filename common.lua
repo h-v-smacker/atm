@@ -48,7 +48,7 @@ end
 
 -- wire transfer data storage
 function atm.read_transaction(name)
-	if atm.completed_transactions[name] == nil then return end
+	if atm.completed_transactions[name] ~= nil then return end
 	local s = storage:get_string("transaction_" .. name)
 	if s == nil then return end
 	local t = minetest.deserialize(s)
