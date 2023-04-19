@@ -36,6 +36,8 @@ local tube_config = {
     -- Get ATM owner
     local meta = minetest.get_meta(pos)
     local owner = meta:get_string("owner")
+    atm.read_account(owner)
+
     -- Determine minegeld type
     if input_name:match('^currency:minegeld_%d+$') then
       minegeld_type = string.gsub(input_name, "currency:minegeld_", "")
