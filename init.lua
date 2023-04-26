@@ -4,7 +4,7 @@
 
 atm = {
   balance = {},
-  startbalance = 30,
+  startbalance = minetest.settings:get("atm.startbalance") or 30,
   pending_transfers = {},
   completed_transactions = {},
   pth = minetest.get_worldpath().."/atm_accounts",

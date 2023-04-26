@@ -1,2 +1,3 @@
 # Enables automatic income
 atm.income_enabled (Is income enabled?) bool true
+atm.startbalance (Startbalance for new players) int 30

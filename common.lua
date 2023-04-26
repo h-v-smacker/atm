@@ -85,6 +85,7 @@ minetest.register_on_leaveplayer(function(player)
 		local name = player:get_player_name()
 		atm.balance[name] = nil
 		atm.completed_transactions[name] = nil
+		atm.pending_transfers[name] = nil
 	end
 end)
 
