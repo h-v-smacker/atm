@@ -1,5 +1,6 @@
 
 -- Check the form
+local S = atm.S
 
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 
@@ -49,7 +50,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		end
 
 		if (atm.balance[n] + transaction.amount) < 0 then
-			minetest.chat_send_player(n, "Not enough money in your account")
+			minetest.chat_send_player(n, S("Not enough money in your account"))
 			transaction.amount = 0
 		end
 
@@ -60,7 +61,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				pinv:add_item("main", item)
 				atm.balance[n] = atm.balance[n] + transaction.amount
 			else
-				minetest.chat_send_player(n, "Not enough room in your inventory")
+				minetest.chat_send_player(n, S("Not enough room in your inventory"))
 			end
 
 		elseif transaction.amount > 0 then
@@ -68,7 +69,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				pinv:remove_item("main", item)
 				atm.balance[n] = atm.balance[n] + transaction.amount
 			else
-				minetest.chat_send_player(n, "Not enough money in your inventory")
+				minetest.chat_send_player(n, S("Not enough money in your inventory"))
 			end
 		end
 

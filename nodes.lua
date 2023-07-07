@@ -1,3 +1,5 @@
+local S = atm.S
+
 local function isempty(s)
   return s == nil or s == '' or s == 0
 end
@@ -7,8 +9,6 @@ local handle_after_place = function(pos, placer, itemstack, pointed_thing)
   local meta = minetest.get_meta(pos)
   local owner = placer:get_player_name()
   meta:set_string("owner", owner)
-  -- Ensure owner's account exists
-  atm.read_account(owner)
 end
 
 local tube_config = {
@@ -80,7 +80,7 @@ local tube_config = {
 
 -- ATM node definitions
 minetest.register_node("atm:atm", {
-  description = "ATM",
+  description = S("ATM"),
   tiles = {
     "atm_top.png", "atm_top.png",
     "atm_side.png", "atm_side.png",
@@ -98,7 +98,7 @@ minetest.register_node("atm:atm", {
 })
 
 minetest.register_node("atm:atm2", {
-  description = "ATM model 2",
+  description = S("ATM model 2"),
   tiles = {
     "atm2_top.png", "atm2_top.png",
     "atm2_side.png", "atm2_side.png",
@@ -116,7 +116,7 @@ minetest.register_node("atm:atm2", {
 })
 
 minetest.register_node("atm:atm3", {
-  description = "ATM model 3",
+  description = S("ATM model 3"),
   tiles = {
     "atm3_top.png", "atm3_top.png",
     "atm3_side.png", "atm3_side.png",
@@ -139,7 +139,7 @@ minetest.register_node("atm:atm3", {
 
 -- Wire transfer terminal node
 minetest.register_node("atm:wtt", {
-  description = "Wire Transfer Terminal",
+  description = S("Wire Transfer Terminal"),
   tiles = {
     "atm_top.png", "atm_top.png",
     "atm_side_wt.png", "atm_side_wt.png",
