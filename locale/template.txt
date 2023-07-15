@@ -1,6 +1,5 @@
 # textdomain: atm
 Your account balance: @1 @2=
-Quit=
 Money input=
 Money output=
 Transactions >=

@@ -50,7 +50,6 @@ function atm.showform (player)
 	default.gui_bg_img..
 	default.gui_slots..
 	"label[2.5,0.15;"..FS("Your account balance: @1 @2", atm.balance[player:get_player_name()], MONEY_SYMBOL).."]"..
-	"button_exit[2.5,1.5;1,2;Quit;"..FS("Quit").."]"..
 	create_currency_buttons(3, 1, 0.5, 1, 1) ..
 	"list[current_player;main;0,4.25;8,1;]"..
 	"list[current_player;main;0,5.5;8,3;8]"..
@@ -82,7 +81,6 @@ function atm.showform2 (player)
 	"label[1.25,0.5;"..FS("Money input").."]" ..
 	"label["..(5.25+xplus)..",0.5;"..FS("Money output").."]" ..
 	"label[2.5,0.15;"..FS("Your account balance: @1 @2", atm.balance[player:get_player_name()], MONEY_SYMBOL).."]"..
-	"button_exit["..(4+xplus)..",2.5;1,2;Quit;"..FS("Quit").."]" ..
 	create_currency_buttons(cols, 2, startx, 1, 1) ..
 	"list[current_player;main;"..(listx)..",4.25;8,1;]"..
 	"list[current_player;main;"..(listx)..",5.5;8,3;8]"..
@@ -129,7 +127,6 @@ function atm.showform3 (player)
 	"label[1.25,0.5;"..FS("Money input").."]" ..
 	"label["..(5.75+xplus_out)..",0.5;"..FS("Money output").."]" ..
 	"label[2.5,0.15;"..FS("Your account balance: @1 @2", atm.balance[player:get_player_name()], MONEY_SYMBOL).."]"..
-	"button_exit["..(7+xplus)..",-0.5;1,2;Quit;"..FS("Quit").."]" ..
 	create_currency_buttons(cols, 3, xstart, 1, gap) ..
 	"list[current_player;main;"..listx..",4.25;8,1;]"..
 	"list[current_player;main;"..listx..",5.5;8,3;8]"..
@@ -156,7 +153,6 @@ function atm.showform_wt (player)
 	"field[0.5,1.5;5,1;dstn;" .. FS("Recipient:") .. ";]" ..
 	"field[6,1.5;2,1;amnt;" .. FS("Amount:") .. ";]" ..
 	"field[0.5,3;7.5,1;desc;" .. FS("Description:") .. ";]" ..
-	"button_exit[0.2,5;1,1;Quit;" .. FS("Quit") .. "]" ..
 	"button[4.7,5;3,1;pay;" .. FS("Complete the payment") .. "]"
 	minetest.after((0.1), function(gui)
 		return minetest.show_formspec(player:get_player_name(), "atm.form.wt", gui)
@@ -176,7 +172,6 @@ function atm.showform_wtconf(player, dstn, amnt, desc)
 	"label[0.5,1.5;" .. FS("Recipient: @1", dstn) .. "]" ..
 	"label[0.5,2;" .. FS("Amount: @1", amnt) .. "]" ..
 	"label[0.5,2.5;" .. FS("Description: @1", desc) .. "]" ..
-	"button_exit[0.2,5;1,1;Quit;" .. FS("Quit") .. "]" ..
 	"button[4.7,5;3,1;cnfrm;" .. FS("Confirm transfer") .. "]"
 	minetest.after((0.1), function(gui)
 			return minetest.show_formspec(player:get_player_name(), "atm.form.wtc", gui)
@@ -206,7 +201,6 @@ function atm.showform_wtlist(player, tlist)
 	"label[2.5,0;" .. FS("Wire Transfer Terminal") .. "]" ..
 	"label[2,0.5;" .. FS("Your account balance: @1 @2", atm.balance[player:get_player_name()], MONEY_SYMBOL) .. "]" ..
 	"textarea[0.5,1.25;7.5,4;hst;" .. FS("Transaction list") .. ";" .. textlist .. "]" ..
-	"button_exit[0.2,5;1,1;Quit;" .. FS("Quit") .. "]" ..
 	"button[4.7,5;3,1;clr;" .. FS("Clear transactions") .. "]"
 	minetest.after((0.1), function(gui)
 			return minetest.show_formspec(player:get_player_name(), "atm.form.wtl", gui)

@@ -8,7 +8,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 
 		local n = player:get_player_name()
 
-		if not pressed.Quit and not pressed.quit then
+		if not pressed.quit then
 			if form == "atm.form.wt" and pressed.transactions then
 				-- transaction list (can be edited in the form, but than means nothing)
 				atm.read_transaction(n)

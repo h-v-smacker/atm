@@ -75,7 +75,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 
 		atm.save_account(n)
 
-		if not pressed.Quit and not pressed.quit then
+		if not pressed.quit then
 			if form == "atm.form" then
 				atm.showform(player)
 			elseif form == "atm.form2" then
