@@ -23,9 +23,9 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				minetest.chat_send_player(n, S("Your transaction history has been cleared"))
 				atm.showform_wtlist(player, atm.completed_transactions[n])
 			elseif form == "atm.form.wt" and pressed.pay then
-
 				-- perform the checks of validity for wire transfer order
 				-- if passed, store the data in a temporary table and show confirmation window
+				atm.read_account(n)
 				atm.read_account(pressed.dstn)
 				if not atm.balance[pressed.dstn] then
 					minetest.chat_send_player(n, S("The Recipient <@1> is not registered in the banking system, aborting",
@@ -33,6 +33,9 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 					atm.showform_wt(player)
 				elseif not string.match(pressed.amnt, '^[0-9]+$') then
 					minetest.chat_send_player(n, S("Invalid amount <@1>: must be an integer number, aborting", pressed.amnt))
+					atm.showform_wt(player)
+				elseif tonumber(pressed.amnt) == 0 then
+					minetest.chat_send_player(n, S("You have to transfer at least 1 Mg, aborting"))
 					atm.showform_wt(player)
 				elseif atm.balance[n] < tonumber(pressed.amnt) then
 					minetest.chat_send_player(n, S("Your account does not have enough funds to complete this transfer, aborting"))
