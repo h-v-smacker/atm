@@ -1,37 +1,46 @@
 # ATM mod for Minetest
 
-This mod adds a faimly of ATM machines designed to work with the currency mod and its
-minegeld banknotes. ATMs allow you to transfer money to your bank account and withdraw
+This mod adds a faimly of ATMs (Automated Teller Machines) designed to work with the currency
+mod and its Minegeld banknotes. ATMs allow you to transfer money to your bank account and withdraw
 various sums as needed.
 
-There are 3 types of ATMs with different capabilities. The most basic version is grey and
-only allows single banknote transactions.
+## ATMs
+
+There are 3 types of ATMs with different capabilities.
+
+### ATM
+The most basic version is grey and blue and only allows single banknote transactions
+with Minegeld notes of value 1, 5 and 10.
 
 ```
 [ steel ingot, mese wire, steel ingot ]
-[ glass,       1 MG note, steel ingot ]
+[ glass,       1 Mg note, steel ingot ]
 [ steel ingot, mese wire, steel ingot ]
 ```
 
-The more advanced, green ATM, allows transactions in bundles of 10 notes.
+### ATM Model 2
+The more advanced, brownish and purple ATM, allows transactions in bundles of 10 notes
+with Minegeld notes of value 1, 5, 10 and 50.
 
 ```
 [ steel ingot, mese wire,    steel ingot ]
-[ glass,       5 MG note,    steel ingot ]
+[ glass,       5 Mg note,    steel ingot ]
 [ steel ingot, mese crystal, steel ingot ]
 ```
 
-The most advanced ATM, the yellow one, allows to add and withdraw banknotes by hundreds.
+### ATM Model 3
+The most advanced ATM, the yellow and red one, allows to add and withdraw banknotes by hundreds
+with Minegeld notes of value 1, 5, 10, 50 and 100.
 
 ```
 [ steel ingot, mese crystal, steel ingot ]
-[ glass,       10 MG note,   steel ingot ]
+[ glass,       10 Mg note,   steel ingot ]
 [ steel ingot, mese crystal, steel ingot ]
 ```
 
-Goes without saying, all lower tier options are also available in a higher tier ATM.
+### Crafting note
 
-If mesecons mod is not installed, then the mese wire in recipes is replaced by a copper ingot.
+If the Mesecons mod is not installed, then the mese wire in recipes is replaced by a copper ingot.
 
 ## Wire Transfer
 

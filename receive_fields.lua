@@ -1,5 +1,6 @@
 
 -- Check the form
+local S = atm.S
 
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 
@@ -10,7 +11,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		local pinv=player:get_inventory()
 
 		-- single note transactions
-		for _,i in pairs({1, 5, 10, -1, -5, -10}) do
+		for _,i in pairs({1, 5, 10, 50, 100, -1, -5, -10, -50, -100}) do
 			if pressed["i"..i] then
 				transaction.amount = i
 				transaction.denomination = '_' .. math.abs(i)
@@ -23,7 +24,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		end
 
 		-- 10x banknote transactions
-		for _,t in pairs({10, 50, 100, -10, -50, -100}) do
+		for _,t in pairs({10, 50, 100, 500, 1000, -10, -50, -100, -500, -1000}) do
 			if pressed["t"..t] then
 				transaction.amount = t
 				transaction.denomination = '_' .. math.abs(t/10)
@@ -36,7 +37,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		end
 
 		-- 100x banknote transactions
-		for _,c in pairs({100, 500, 1000, -100, -500, -1000}) do
+		for _,c in pairs({100, 500, 1000, 5000, 10000, -100, -500, -1000, -5000, -10000}) do
 			if pressed["c"..c] then
 				transaction.amount = c
 				transaction.denomination = '_' .. math.abs(c/100)
@@ -49,7 +50,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		end
 
 		if (atm.balance[n] + transaction.amount) < 0 then
-			minetest.chat_send_player(n, "Not enough money in your account")
+			minetest.chat_send_player(n, S("Not enough money in your account"))
 			transaction.amount = 0
 		end
 
@@ -60,7 +61,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				pinv:add_item("main", item)
 				atm.balance[n] = atm.balance[n] + transaction.amount
 			else
-				minetest.chat_send_player(n, "Not enough room in your inventory")
+				minetest.chat_send_player(n, S("Not enough room in your inventory"))
 			end
 
 		elseif transaction.amount > 0 then
@@ -68,13 +69,13 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 				pinv:remove_item("main", item)
 				atm.balance[n] = atm.balance[n] + transaction.amount
 			else
-				minetest.chat_send_player(n, "Not enough money in your inventory")
+				minetest.chat_send_player(n, S("Not enough money in your inventory"))
 			end
 		end
 
-		atm.saveaccounts()
+		atm.save_account(n)
 
-		if not pressed.Quit and not pressed.quit then
+		if not pressed.quit then
 			if form == "atm.form" then
 				atm.showform(player)
 			elseif form == "atm.form2" then
