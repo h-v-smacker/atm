@@ -163,7 +163,7 @@ function atm.showform_wtlist (player, tlist)
 	"button[5.75,0;2,1;transfer;< Transfer money]" ..
 	"label[2.5,0;Wire Transfer Terminal]" ..
 	"label[2,0.5;Your account balance: $".. atm.balance[player:get_player_name()].. "]" ..
-	"textarea[0.5,1.25;7.5,4;hst;Transaction list;" .. textlist .. "]" ..
+	"textarea[0.5,1.25;7.5,4;hst;Transaction list;" .. core.formspec_escape(textlist) .. "]" ..
 	"button_exit[0.2,5;1,1;Quit;Quit]" ..
 	"button[4.7,5;3,1;clr;Clear transactions]"
 	minetest.after((0.1), function(gui)
